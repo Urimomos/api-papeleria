@@ -13,10 +13,9 @@ class ProductoController extends Controller
      */
     public function index()
     {
-        // Traemos todos los productos usando el modelo
-        $productos = Producto::all(); 
+        
+        $productos = Producto::where('activo', true)->get(); 
 
-        // Respondemos con un JSON profesional y código 200 (OK)
         return response()->json($productos, 200);
     }
 
@@ -25,7 +24,7 @@ class ProductoController extends Controller
      */
     public function store(Request $request)
     {
-        // Validamos los datos antes de hacer nada
+       
         $validados = $request->validate([
             'nombre'      => 'required|string|max:255',
             'descripcion' => 'nullable|string',
@@ -33,7 +32,7 @@ class ProductoController extends Controller
             'stock'       => 'required|integer|min:0',
         ]);
 
-        // Creamos el producto con los datos limpios
+       
         $producto = Producto::create($validados);
 
         return response()->json([
@@ -78,11 +77,11 @@ class ProductoController extends Controller
     public function destroy(Producto $producto)
     {
         // Cambiamos el estado en lugar de borrar la fila
-        $producto->update(['activo' => false]);
+       $producto->update(['activo' => false]);
     
         return response()->json([
-            'status'  => 'success',
-            'message' => 'Producto dado de baja correctamente'
+        'status'  => 'success',
+        'message' => 'Producto dado de baja correctamente'
         ]);
     }
 }
