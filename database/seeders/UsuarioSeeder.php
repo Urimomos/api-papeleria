@@ -15,6 +15,7 @@ class UsuarioSeeder extends Seeder
             'ap'       => 'Papeleria',
             'am'       => 'Karla',
             'username' => 'admin',
+            'email' => 'papeleriakarla058@gmail.com',
             'password' => Hash::make('admin123'), // Laravel cifra la contraseña automáticamente
             'role'     => 'admin', //
         ]);

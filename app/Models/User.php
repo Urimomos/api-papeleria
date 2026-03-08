@@ -23,6 +23,7 @@ class User extends Authenticatable
     'ap', // Apellido Paterno
     'am', // Apellido Materno
     'username',
+    'email',
     'password',
     'role', // 'admin' o 'user'
     ];

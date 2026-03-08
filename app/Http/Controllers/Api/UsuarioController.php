@@ -20,6 +20,7 @@ class UsuarioController extends Controller
             'ap'       => 'required|string|max:255',
             'am'       => 'required|string|max:255',
             'username' => 'required|string|unique:users,username',
+            'email' => 'required|email|unique:users,email,' . ($id ?? 'NULL'),
             'password' => 'required|string|min:8',
             'role'     => 'required|in:admin,user'
         ]);
@@ -41,6 +42,7 @@ class UsuarioController extends Controller
             'ap'       => 'sometimes|required|string',
             'am'       => 'sometimes|required|string',
             'username' => 'sometimes|required|unique:users,username,'.$id,
+            'email' => 'required|email|unique:users,email,' . ($id ?? 'NULL'),
             'role'     => 'sometimes|required|in:admin,user'
         ]);
 
