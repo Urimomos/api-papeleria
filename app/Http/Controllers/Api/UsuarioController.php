@@ -16,10 +16,10 @@ class UsuarioController extends Controller
     public function store(Request $request)
     {
         $validados = $request->validate([
-            'nombre'   => 'required|string|max:255',
-            'ap'       => 'required|string|max:255',
-            'am'       => 'required|string|max:255',
-            'username' => 'required|string|unique:users,username',
+            'nombre'   => ['required', 'string', 'max:255', 'regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/u'], 
+            'ap'       => ['required', 'string', 'max:255', 'regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/u'], 
+            'am'       => ['required', 'string', 'max:255', 'regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/u'], 
+            'username' => ['required', 'string', 'unique:users', 'regex:/^[a-zA-Z0-9.]+$/'], 
             'email' => 'required|email|unique:users,email,' . ($id ?? 'NULL'),
             'password' => 'required|string|min:8',
             'role'     => 'required|in:admin,user'
