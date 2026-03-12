@@ -27,10 +27,13 @@ class DashboardController extends Controller
         $ventasMes = Venta::whereMonth('created_at', Carbon::now()->month)->count();
 
         
-        $ultimasVentas = Venta::with('user:id,nombre')
-                             ->latest()
-                             ->take(5)
-                             ->get();
+        $ultimasVentas = Venta::with([
+                'user:id,nombre', 
+                'detalles.producto:id,nombre' 
+            ])
+            ->latest()
+            ->take(5)
+            ->get();
 
        
         $ultimaVenta = Venta::latest()->first();
