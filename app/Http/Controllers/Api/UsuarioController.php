@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class UsuarioController extends Controller
 {
@@ -19,22 +20,37 @@ class UsuarioController extends Controller
             'nombre'   => ['required', 'string', 'max:255', 'regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/u'], 
             'ap'       => ['required', 'string', 'max:255', 'regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/u'], 
             'am'       => ['required', 'string', 'max:255', 'regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/u'], 
-            'username' => ['required', 'string', 'unique:users,username', 'regex:/^[a-zA-Z0-9.]+$/'], 
-            'email'    => ['required', 'email', 'unique:users,email'], 
+            
+            // Actualizamos username con Rule [cite: 2025-11-23]
+            'username' => [
+                'required', 
+                'string', 
+                Rule::unique('users', 'username')->whereNull('deleted_at'), 
+                'regex:/^[a-zA-Z0-9.]+$/'
+            ], 
+            
+            // Actualizamos email con Rule
+            'email'    => [
+                'required', 
+                'email', 
+                Rule::unique('users', 'email')->whereNull('deleted_at')
+            ], 
+            
             'password' => ['required', 'string', 'min:8'],
             'role'     => ['required', 'in:admin,user']
         ], [
-            'email.unique'    => 'Este correo ya está registrado.',
-            'username.unique' => 'Este nombre de usuario ya está en uso.',
+            // Ajustamos el mensaje para que sea más claro
+            'email.unique'    => 'Este correo ya está registrado por un usuario activo.',
+            'username.unique' => 'Este nombre de usuario ya está en uso por un usuario activo.',
             'nombre.regex'    => 'El nombre solo debe contener letras.',
             'password.min'    => 'La contraseña debe tener al menos 8 caracteres.'
         ]);
-
+    
         // Encriptamos la contraseña [cite: 2025-11-23]
         $validados['password'] = Hash::make($request->password);
-
+    
         $usuario = User::create($validados);
-
+    
         return response()->json(['status' => 'success', 'data' => $usuario], 201);
     }
 
